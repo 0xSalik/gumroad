@@ -287,10 +287,9 @@ module StripeMerchantAccountManager
 
     save_stripe_bank_account_info(bank_account, stripe_account.refresh)
 
-    # Defensively clear any stale BANK_ACCOUNT compliance requests (e.g. left over
-    # from a previous failed sync attempt) so the corresponding banner on the
-    # payout settings page disappears immediately, instead of waiting on the
-    # next account.updated webhook from Stripe.
+    # Mark any stale BANK_ACCOUNT compliance requests as provided right away,
+    # so the payout settings banner clears without waiting on the next
+    # account.updated webhook to arrive.
     UserComplianceInfoRequest.handle_new_bank_account(bank_account)
 
     :synced

@@ -3,11 +3,6 @@
 class DominicanRepublicBankAccount < BankAccount
   BANK_ACCOUNT_TYPE = "DO"
 
-  # Stripe's DR routing directory expects a 3-digit zero-padded bank code
-  # (e.g. `003` for Banco Popular Dominicano, `021` for Banesco).
-  # Shorter inputs (`2`, `21`) are rejected by Stripe with a confusing
-  # "must contain both the bank code and the branch code" format error,
-  # and longer inputs / SWIFT/BIC codes are rejected as not in the directory.
   BANK_CODE_FORMAT_REGEX = /^\d{3}$/
   ACCOUNT_NUMBER_FORMAT_REGEX = /^\d{1,28}$/
   private_constant :BANK_CODE_FORMAT_REGEX, :ACCOUNT_NUMBER_FORMAT_REGEX
