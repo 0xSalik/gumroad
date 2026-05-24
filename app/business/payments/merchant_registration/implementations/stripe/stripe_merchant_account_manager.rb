@@ -286,6 +286,13 @@ module StripeMerchantAccountManager
     Stripe::Account.update(stripe_account.id, attributes)
 
     save_stripe_bank_account_info(bank_account, stripe_account.refresh)
+
+    # Defensively clear any stale BANK_ACCOUNT compliance requests (e.g. left over
+    # from a previous failed sync attempt) so the corresponding banner on the
+    # payout settings page disappears immediately, instead of waiting on the
+    # next account.updated webhook from Stripe.
+    UserComplianceInfoRequest.handle_new_bank_account(bank_account)
+
     :synced
   rescue Stripe::InvalidRequestError => e
     record_bank_sync_failure_note(user, e)
